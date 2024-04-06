@@ -1,0 +1,26 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  {{ object.name }} details
+{% endblock %}
+
+{% block body %}
+  <h1>Advertising campaign #{{ object.pk }}</h1>
+
+  <ul>
+    <li>Name: {{ object.name }}</li>
+    <li>Service: {{ object.service }}</li>
+    <li>Promotion channel: {{ object.promotion_channel }}</li>
+    <li>Budget: {{ object.budget }}</li>
+  </ul>
+  <br>
+  <div>
+    <a href="{% url 'crm:advertising_campaign_update' pk=object.pk %}">Update advertising campaign</a>
+  </div>
+  <div>
+    <a href="{% url 'crm:advertising_campaign_delete' pk=object.pk %}">Delete advertising campaign</a>
+  </div>
+  <div>
+    <a href="{% url 'crm:advertising_campaigns' %}">Back to advertising campaigns</a>
+  </div>
+{% endblock %}

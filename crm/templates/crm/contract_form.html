@@ -1,0 +1,15 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  Create contract
+{% endblock %}
+
+{% block body %}
+  <h1>Create contract</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create</button>
+  </form>
+{% endblock %}

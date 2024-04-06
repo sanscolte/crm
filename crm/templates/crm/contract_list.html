@@ -1,0 +1,22 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  Contracts
+{% endblock %}
+
+{% block body %}
+  <h1>Contracts</h1>
+
+  <ul>
+    {% for contract in object_list %}
+      <li><a href="{% url 'crm:contract_details' pk=contract.pk %}">{{ contract.name }}</a></li>
+      <a href="{% url 'crm:contract_delete' pk=contract.pk %}">Delete contract</a>
+    {% empty %}
+      <li>No contracts yet</li>
+    {% endfor %}
+  </ul>
+  <br>
+  <div>
+    <a href="{% url 'crm:create_contract' %}">Create a new contract</a>
+  </div>
+{% endblock %}

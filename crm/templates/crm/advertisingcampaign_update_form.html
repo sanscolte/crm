@@ -1,0 +1,18 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  Update {{ object.name }}
+{% endblock %}
+
+{% block body %}
+  <h1>Update {{ object.name }}</h1>
+  <div>
+    {% include 'crm/update_form.html' %}
+  </div>
+  <br>
+  <div>
+    <a href="{% url 'crm:advertising_campaign_details' pk=object.pk %}">
+      Back to advertising campaign
+    </a>
+  </div>
+{% endblock %}

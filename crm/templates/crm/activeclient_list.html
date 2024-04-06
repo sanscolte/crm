@@ -1,0 +1,20 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  Active clients
+{% endblock %}
+
+{% block body %}
+  <h1>Active clients</h1>
+
+  <ul>
+    {% for active_client in object_list %}
+      <li><a
+          href="{% url 'crm:active_client_details' pk=active_client.pk %}">{{ active_client.potential_client.full_name }}</a>
+      </li>
+      <a href="{% url 'crm:active_client_delete' pk=active_client.pk %}">Delete active client</a>
+    {% empty %}
+      <li>No active clients yet</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

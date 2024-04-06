@@ -1,0 +1,27 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  Potential clients
+{% endblock %}
+
+{% block body %}
+  <h1>Potential clients</h1>
+
+  <ul>
+    {% for potential_client in object_list %}
+      <li><a href="{% url 'crm:potential_client_details' pk=potential_client.pk %}">{{ potential_client.full_name }}</a>
+      </li>
+      <a href="{% url 'crm:potential_client_delete' pk=potential_client.pk %}">Delete potential client</a>
+      {% if potential_client.id not in active_clients_ids %}
+        <br>
+        <a href="{% url 'crm:create_active_client' pk=potential_client.pk %}">Convert to active client</a>
+      {% endif %}
+    {% empty %}
+      <li>No potential clients yet</li>
+    {% endfor %}
+  </ul>
+  <br>
+  <div>
+    <a href="{% url 'crm:create_potential_client' %}">Create a new potential client</a>
+  </div>
+{% endblock %}

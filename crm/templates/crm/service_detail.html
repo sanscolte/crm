@@ -1,0 +1,25 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  {{ object.name }} details
+{% endblock %}
+
+{% block body %}
+  <h1>Service #{{ object.pk }}</h1>
+
+  <ul>
+    <li>Name: {{ object.name }}</li>
+    <li>Description: {{ object.description }}</li>
+    <li>Cost: {{ object.cost }}</li>
+  </ul>
+  <br>
+  <div>
+    <a href="{% url 'crm:service_update' pk=object.pk %}">Update service</a>
+  </div>
+  <div>
+    <a href="{% url 'crm:service_delete' pk=object.pk %}">Delete service</a>
+  </div>
+  <div>
+    <a href="{% url 'crm:services' %}">Back to services</a>
+  </div>
+{% endblock %}

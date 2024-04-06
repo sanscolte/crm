@@ -1,0 +1,29 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  {{ object.name }} details
+{% endblock %}
+
+{% block body %}
+  <h1>Contract #{{ object.pk }}</h1>
+
+  <ul>
+    <li>Name: {{ object.name }}</li>
+    <li>Service: {{ object.service }}</li>
+    <li>Document: <a href="{{ object.document.url }}">{{ object.document.name }}</a></li>
+    <li>Conclusion date: {{ object.conclusion_date }}</li>
+    <li>Validity period: {{ object.validity_period }}</li>
+    <li>Amount: {{ object.amount }}</li>
+  </ul>
+
+  <br>
+  <div>
+    <a href="{% url 'crm:contract_update' pk=object.pk %}">Update contract</a>
+  </div>
+  <div>
+    <a href="{% url 'crm:contract_delete' pk=object.pk %}">Delete contract</a>
+  </div>
+  <div>
+    <a href="{% url 'crm:contracts' %}">Back to contracts</a>
+  </div>
+{% endblock %}

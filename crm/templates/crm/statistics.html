@@ -1,0 +1,15 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  Statistics
+{% endblock %}
+
+{% block body %}
+  <h1>Statistics</h1>
+
+  <ul>
+    <li>Total clients attracted: {{ potential_clients }}</li>
+    <li>Total active clients: {{ active_clients }}</li>
+    <li>Income-expenses ratio: {{ income_expenses_ratio }}</li>
+  </ul>
+{% endblock %}

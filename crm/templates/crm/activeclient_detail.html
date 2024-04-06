@@ -1,0 +1,25 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  {{ object.name }} details
+{% endblock %}
+
+{% block body %}
+  <h1>Active client #{{ object.pk }}</h1>
+
+  <ul>
+    <li>Potential client: {{ object.potential_client }}</li>
+    <li>Contract: {{ object.contract }}</li>
+  </ul>
+
+  <br>
+  <div>
+    <a href="{% url 'crm:active_client_update' pk=object.pk %}">Update active client</a>
+  </div>
+  <div>
+    <a href="{% url 'crm:active_client_delete' pk=object.pk %}">Delete active client</a>
+  </div>
+  <div>
+    <a href="{% url 'crm:active_clients' %}">Back to active clients</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}
+  Services
+{% endblock %}
+
+{% block body %}
+  <h1>Services</h1>
+
+  <ul>
+    {% for service in object_list %}
+      <li>
+        <a href="{% url 'crm:service_details' pk=service.pk %}">{{ service.name }}</a>
+      </li>
+      <a href="{% url 'crm:service_delete' pk=service.pk %}">Delete service</a>
+    {% empty %}
+      <li>No services yet</li>
+    {% endfor %}
+  </ul>
+  <br>
+  <div>
+    <a href="{% url 'crm:create_service' %}">Create a new service</a>
+  </div>
+{% endblock %}
