@@ -2,9 +2,10 @@ from django.db import models
 
 
 class Service(models.Model):
+    """ Модель услуги """
     class Meta:
-        verbose_name = 'Услуга'
-        verbose_name_plural = 'Услуги'
+        verbose_name = "Услуга"
+        verbose_name_plural = "Услуги"
 
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -15,9 +16,10 @@ class Service(models.Model):
 
 
 class AdvertisingCampaign(models.Model):
+    """ Модель рекламной компании """
     class Meta:
-        verbose_name = 'Рекламная компания'
-        verbose_name_plural = 'Рекламные компании'
+        verbose_name = "Рекламная компания"
+        verbose_name_plural = "Рекламные компании"
 
     name = models.CharField(max_length=100)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
@@ -29,27 +31,31 @@ class AdvertisingCampaign(models.Model):
 
 
 class PotentialClient(models.Model):
+    """ Модель потенциального клиента """
     class Meta:
-        verbose_name = 'Потенциальный клиент'
-        verbose_name_plural = 'Потенциальные клиенты'
+        verbose_name = "Потенциальный клиент"
+        verbose_name_plural = "Потенциальные клиенты"
 
     full_name = models.CharField(max_length=100)
     phone = models.CharField(max_length=11)
     email = models.EmailField()
-    advertising_campaign = models.ForeignKey(AdvertisingCampaign, on_delete=models.CASCADE)
+    advertising_campaign = models.ForeignKey(
+        AdvertisingCampaign, on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return self.full_name
 
 
 class Contract(models.Model):
+    """ Модель контракта """
     class Meta:
-        verbose_name = 'Контракт'
-        verbose_name_plural = 'Контракты'
+        verbose_name = "Контракт"
+        verbose_name_plural = "Контракты"
 
     name = models.CharField(max_length=100)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    document = models.FileField(upload_to='documents/')
+    document = models.FileField(upload_to="documents/")
     conclusion_date = models.DateField()
     validity_period = models.PositiveIntegerField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -59,9 +65,10 @@ class Contract(models.Model):
 
 
 class ActiveClient(models.Model):
+    """ Модель активного клиента """
     class Meta:
-        verbose_name = 'Активный клиент'
-        verbose_name_plural = 'Активные клиенты'
+        verbose_name = "Активный клиент"
+        verbose_name_plural = "Активные клиенты"
 
     potential_client = models.OneToOneField(PotentialClient, on_delete=models.CASCADE)
     contract = models.OneToOneField(Contract, on_delete=models.CASCADE)
