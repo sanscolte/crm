@@ -1,7 +1,8 @@
-from typing import List, Tuple, Any, Dict, Union
+from typing import List, Tuple, Any, Dict, Literal
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ImproperlyConfigured
+from django.db.models import QuerySet
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -14,7 +15,7 @@ from django.views.generic import (
 
 from crm.models import (
     Service,
-    AdvertisingCampaign,
+    Campaign,
     PotentialClient,
     Contract,
     ActiveClient,
@@ -23,67 +24,72 @@ from crm.models import (
 
 # PERMISSIONS GROUP CLASSES
 class GroupRequiredMixin(UserPassesTestMixin):
-    """ Миксин проверки наличия пользователя в указанной группе прав group_names """
+    """Миксин проверки наличия пользователя в указанной группе прав group_names"""
+
     group_names: List[str] = []
 
     def test_func(self):
         if not self.group_names:
-            raise ImproperlyConfigured(
-                "Необходимо установить group_names в вашем представлении."
-            )
-        user_groups = self.request.user.groups.values_list("name", flat=True)
+            raise ImproperlyConfigured("Необходимо установить group_names в вашем представлении")
+        user_groups: List[str] = self.request.user.groups.values_list("name", flat=True)
         return any(group_name in user_groups for group_name in self.group_names)
 
 
 class SuperUserRequiredMixin(UserPassesTestMixin):
-    """ Миксин проверки пользователя на статус суперпользователя """
+    """Миксин проверки пользователя на статус суперпользователя"""
+
     def test_func(self):
         return self.request.user.is_superuser
 
 
 # CREATE VIEWS
 class CreateServiceView(LoginRequiredMixin, GroupRequiredMixin, CreateView):
-    """ Представление создания услуги """
+    """Представление создания услуги"""
+
     group_names: List[str] = [
         "Marketer",
     ]
     model = Service
-    fields: Tuple[Tuple[str], str] = "__all__"
+    fields: Literal["__all__"] = "__all__"
     success_url = reverse_lazy("crm:services")
 
 
-class CreateAdvertisingCampaignView(LoginRequiredMixin, GroupRequiredMixin, CreateView):
-    """ Представление создания рекламной компании """
+class CreateCampaignView(LoginRequiredMixin, GroupRequiredMixin, CreateView):
+    """Представление создания рекламной компании"""
+
     group_names: List[str] = [
         "Marketer",
     ]
-    model = AdvertisingCampaign
-    fields: Tuple[Tuple[str], str] = "__all__"
-    success_url = reverse_lazy("crm:advertising_campaigns")
+    model = Campaign
+    fields: Literal["__all__"] = "__all__"
+    success_url = reverse_lazy("crm:campaigns")
 
 
 class CreatePotentialClientView(LoginRequiredMixin, GroupRequiredMixin, CreateView):
-    """ Представление создания потенциального клиента """
+    """Представление создания потенциального клиента"""
+
     group_names: List[str] = [
         "Operator",
     ]
     model = PotentialClient
-    fields: Tuple[Tuple[str], str] = "__all__"
+    fields: Literal["__all__"] = "__all__"
     success_url = reverse_lazy("crm:potential_clients")
 
 
 class CreateContractView(LoginRequiredMixin, GroupRequiredMixin, CreateView):
-    """ Представление создания контракта """
+    """Представление создания контракта"""
+
     group_names: List[str] = [
         "Manager",
     ]
     model = Contract
-    fields: Tuple[Tuple[str], str] = "__all__"
+    fields: Literal["__all__"] = "__all__"
     success_url = reverse_lazy("crm:contracts")
 
 
 class CreateActiveClientView(LoginRequiredMixin, GroupRequiredMixin, CreateView):
-    """ Представление создания активного клиента """
+    """Представление создания активного клиента"""
+
     group_names: List[str] = [
         "Manager",
     ]
@@ -92,32 +98,33 @@ class CreateActiveClientView(LoginRequiredMixin, GroupRequiredMixin, CreateView)
     success_url = reverse_lazy("crm:active_clients")
 
     def form_valid(self, form):
-        potential_client_id = self.kwargs.get("pk")
-        form.instance.potential_client = PotentialClient.objects.get(
-            pk=potential_client_id
-        )
+        potential_client_id: int = self.kwargs.get("pk")
+        form.instance.potential_client = PotentialClient.objects.get(pk=potential_client_id)
         return super().form_valid(form)
 
 
 # LIST VIEWS
 class ServiceListView(LoginRequiredMixin, GroupRequiredMixin, ListView):
-    """ Представление списка услуг """
+    """Представление списка услуг"""
+
     group_names: List[str] = [
         "Marketer",
     ]
     model = Service
 
 
-class AdvertisingCampaignListView(LoginRequiredMixin, GroupRequiredMixin, ListView):
-    """ Представление списка рекламной компании """
+class CampaignListView(LoginRequiredMixin, GroupRequiredMixin, ListView):
+    """Представление списка рекламной компании"""
+
     group_names: List[str] = [
         "Marketer",
     ]
-    model = AdvertisingCampaign
+    model = Campaign
 
 
 class PotentialClientListView(LoginRequiredMixin, GroupRequiredMixin, ListView):
-    """ Представление списка потенциальных клиентов """
+    """Представление списка потенциальных клиентов"""
+
     group_names: List[str] = ["Operator", "Manager"]
     model = PotentialClient
 
@@ -125,19 +132,16 @@ class PotentialClientListView(LoginRequiredMixin, GroupRequiredMixin, ListView):
         context = super().get_context_data()
         potential_clients = self.get_queryset()
 
-        active_clients = ActiveClient.objects.filter(
-            potential_client__in=potential_clients
-        )
-        active_clients_ids = active_clients.values_list(
-            "potential_client_id", flat=True
-        )
+        active_clients: QuerySet = ActiveClient.objects.filter(potential_client__in=potential_clients)
+        active_clients_ids: List[int] = active_clients.values_list("potential_client_id", flat=True)
 
         context["active_clients_ids"] = active_clients_ids
         return context
 
 
 class ContractListView(LoginRequiredMixin, GroupRequiredMixin, ListView):
-    """ Представление списка контраков """
+    """Представление списка контраков"""
+
     group_names: List[str] = [
         "Manager",
     ]
@@ -145,29 +149,33 @@ class ContractListView(LoginRequiredMixin, GroupRequiredMixin, ListView):
 
 
 class ActiveClientListView(LoginRequiredMixin, SuperUserRequiredMixin, ListView):
-    """ Представление списка активных клиентов """
+    """Представление списка активных клиентов"""
+
     queryset = ActiveClient.objects.select_related("potential_client")
 
 
 # DETAIL VIEWS
 class ServiceDetailView(LoginRequiredMixin, GroupRequiredMixin, DetailView):
-    """ Представление списка деталей услуги """
+    """Представление списка деталей услуги"""
+
     group_names: List[str] = [
         "Marketer",
     ]
     model = Service
 
 
-class AdvertisingCampaignDetailView(LoginRequiredMixin, GroupRequiredMixin, DetailView):
-    """ Представление списка деталей рекламной компании """
+class CampaignDetailView(LoginRequiredMixin, GroupRequiredMixin, DetailView):
+    """Представление списка деталей рекламной компании"""
+
     group_names: List[str] = [
         "Marketer",
     ]
-    model = AdvertisingCampaign
+    model = Campaign
 
 
 class PotentialClientDetailView(LoginRequiredMixin, GroupRequiredMixin, DetailView):
-    """ Представление списка деталей потенциального клиента """
+    """Представление списка деталей потенциального клиента"""
+
     group_names: List[str] = [
         "Operator",
     ]
@@ -175,7 +183,8 @@ class PotentialClientDetailView(LoginRequiredMixin, GroupRequiredMixin, DetailVi
 
 
 class ContractDetailView(LoginRequiredMixin, GroupRequiredMixin, DetailView):
-    """ Представление списка деталей контракта """
+    """Представление списка деталей контракта"""
+
     group_names: List[str] = [
         "Manager",
     ]
@@ -183,98 +192,108 @@ class ContractDetailView(LoginRequiredMixin, GroupRequiredMixin, DetailView):
 
 
 class ActiveClientDetailView(LoginRequiredMixin, SuperUserRequiredMixin, DetailView):
-    """ Представление списка деталей активного клиента """
+    """Представление списка деталей активного клиента"""
+
     model = ActiveClient
 
 
 # DELETE VIEWS
 class ServiceDeleteView(LoginRequiredMixin, SuperUserRequiredMixin, DeleteView):  # type: ignore
-    """ Представление удаления услуги """
+    """Представление удаления услуги"""
+
     model = Service
     success_url = reverse_lazy("crm:services")
 
 
-class AdvertisingCampaignDeleteView(  # type: ignore
-    LoginRequiredMixin, SuperUserRequiredMixin, DeleteView
-):
-    """ Представление удаления рекламной компании """
-    model = AdvertisingCampaign
-    success_url = reverse_lazy("crm:advertising_campaigns")
+class CampaignDeleteView(LoginRequiredMixin, SuperUserRequiredMixin, DeleteView):  # type: ignore
+    """Представление удаления рекламной компании"""
+
+    model = Campaign
+    success_url = reverse_lazy("crm:campaigns")
 
 
 class PotentialClientDeleteView(LoginRequiredMixin, SuperUserRequiredMixin, DeleteView):  # type: ignore
-    """ Представление удаления потенциального клиента """
+    """Представление удаления потенциального клиента"""
+
     model = PotentialClient
     success_url = reverse_lazy("crm:potential_clients")
 
 
 class ContractDeleteView(LoginRequiredMixin, SuperUserRequiredMixin, DeleteView):  # type: ignore
-    """ Представление удаления контракта """
+    """Представление удаления контракта"""
+
     model = Contract
     success_url = reverse_lazy("crm:contracts")
 
 
 class ActiveClientDeleteView(LoginRequiredMixin, SuperUserRequiredMixin, DeleteView):  # type: ignore
-    """ Представление удаления активного клиента """
+    """Представление удаления активного клиента"""
+
     model = ActiveClient
     success_url = reverse_lazy("crm:active_clients")
 
 
 # UPDATE VIEWS
 class ServiceUpdateView(LoginRequiredMixin, GroupRequiredMixin, UpdateView):
-    """ Представление редактирования услуги """
+    """Представление редактирования услуги"""
+
     group_names: List[str] = [
         "Marketer",
     ]
     model = Service
-    fields: Union[Tuple[str], str] = "__all__"
+    fields: Literal["__all__"] = "__all__"
     template_name_suffix = "_update_form"
     success_url = reverse_lazy("crm:services")
 
 
-class AdvertisingCampaignUpdateView(LoginRequiredMixin, GroupRequiredMixin, UpdateView):
-    """ Представление редактирования рекламной компании """
+class CampaignUpdateView(LoginRequiredMixin, GroupRequiredMixin, UpdateView):
+    """Представление редактирования рекламной компании"""
+
     group_names: List[str] = [
         "Marketer",
     ]
-    model = AdvertisingCampaign
-    fields: Union[Tuple[str], str] = "__all__"
+    model = Campaign
+    fields: Literal["__all__"] = "__all__"
     template_name_suffix = "_update_form"
-    success_url = reverse_lazy("crm:advertising_campaigns")
+    success_url = reverse_lazy("crm:campaigns")
 
 
 class PotentialClientUpdateView(LoginRequiredMixin, GroupRequiredMixin, UpdateView):
-    """ Представление редактирования потенциального клиента """
+    """Представление редактирования потенциального клиента"""
+
     group_names: List[str] = [
         "Operator",
     ]
     model = PotentialClient
-    fields: Union[Tuple[str], str] = "__all__"
+    fields: Literal["__all__"] = "__all__"
     template_name_suffix = "_update_form"
     success_url = reverse_lazy("crm:potential_clients")
 
 
 class ContractUpdateView(LoginRequiredMixin, GroupRequiredMixin, UpdateView):
-    """ Представление редактирования контракта """
+    """Представление редактирования контракта"""
+
     group_names: List[str] = [
         "Manager",
     ]
     model = Contract
-    fields: Union[Tuple[str], str] = "__all__"
+    fields: Literal["__all__"] = "__all__"
     template_name_suffix = "_update_form"
     success_url = reverse_lazy("crm:contracts")
 
 
 class ActiveClientUpdateView(LoginRequiredMixin, SuperUserRequiredMixin, UpdateView):
-    """ Представление редактирования активного клиента """
+    """Представление редактирования активного клиента"""
+
     model = ActiveClient
-    fields: Union[Tuple[str], str] = "__all__"
+    fields: Literal["__all__"] = "__all__"
     template_name_suffix = "_update_form"
     success_url = reverse_lazy("crm:active_clients")
 
 
 class StatisticsView(LoginRequiredMixin, TemplateView):
-    """ Представление статистики """
+    """Представление статистики"""
+
     template_name = "crm/statistics.html"
 
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
@@ -282,15 +301,9 @@ class StatisticsView(LoginRequiredMixin, TemplateView):
 
         potential_clients: int = PotentialClient.objects.count()
         active_clients: int = ActiveClient.objects.count()
-        total_income: int = sum(
-            int(contract.amount) for contract in Contract.objects.all()
-        )
-        total_expenses: int = sum(
-            int(campaign.budget) for campaign in AdvertisingCampaign.objects.all()
-        )
-        income_expenses_ratio: float = round(
-            (total_income / total_expenses if total_income > 0 else 0), 2
-        )
+        total_income: int = sum(int(contract.amount) for contract in Contract.objects.all())
+        total_expenses: int = sum(int(campaign.budget) for campaign in Campaign.objects.all())
+        income_expenses_ratio: float = round((total_income / total_expenses if total_income > 0 else 0), 2)
 
         context["potential_clients"] = potential_clients
         context["active_clients"] = active_clients

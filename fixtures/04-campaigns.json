@@ -1,0 +1,12 @@
+[
+  {
+    "model": "crm.campaign",
+    "pk": 1,
+    "fields": {
+      "name": "New campaign",
+      "service": 7,
+      "promotion_channel": "New promotion channel",
+      "budget": "750.01"
+    }
+  }
+]

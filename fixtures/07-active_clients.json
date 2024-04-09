@@ -1,0 +1,26 @@
+[
+  {
+    "model": "crm.activeclient",
+    "pk": 1,
+    "fields": {
+      "potential_client": 1,
+      "contract": 1
+    }
+  },
+  {
+    "model": "crm.activeclient",
+    "pk": 5,
+    "fields": {
+      "potential_client": 3,
+      "contract": 2
+    }
+  },
+  {
+    "model": "crm.activeclient",
+    "pk": 8,
+    "fields": {
+      "potential_client": 4,
+      "contract": 4
+    }
+  }
+]

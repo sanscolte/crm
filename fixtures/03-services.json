@@ -1,0 +1,11 @@
+[
+  {
+    "model": "crm.service",
+    "pk": 7,
+    "fields": {
+      "name": "New service",
+      "description": "This is a same new service",
+      "cost": "140.00"
+    }
+  }
+]

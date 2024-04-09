@@ -1,0 +1,74 @@
+[
+  {
+    "model": "crm.contract",
+    "pk": 1,
+    "fields": {
+      "name": "New contract",
+      "service": 7,
+      "document": "documents/manage.py",
+      "conclusion_date": "2024-04-04",
+      "validity_period": 90,
+      "amount": "10000.00"
+    }
+  },
+  {
+    "model": "crm.contract",
+    "pk": 2,
+    "fields": {
+      "name": "Other contract",
+      "service": 7,
+      "document": "documents/Валидные_Продукты_re-Store.json",
+      "conclusion_date": "2024-04-06",
+      "validity_period": 60,
+      "amount": "2000.00"
+    }
+  },
+  {
+    "model": "crm.contract",
+    "pk": 3,
+    "fields": {
+      "name": "Same contract",
+      "service": 7,
+      "document": "documents/Валидные_Продукты_re-Store_prlXTbR.json",
+      "conclusion_date": "2024-04-05",
+      "validity_period": 100,
+      "amount": "500.00"
+    }
+  },
+  {
+    "model": "crm.contract",
+    "pk": 4,
+    "fields": {
+      "name": "Test contract",
+      "service": 7,
+      "document": "documents/Неалидные_Продукты_re-Store.json",
+      "conclusion_date": "2024-04-06",
+      "validity_period": 90,
+      "amount": "750.00"
+    }
+  },
+  {
+    "model": "crm.contract",
+    "pk": 6,
+    "fields": {
+      "name": "Same test contract",
+      "service": 7,
+      "document": "documents/Резюме.pdf",
+      "conclusion_date": "2024-04-08",
+      "validity_period": 100,
+      "amount": "1000.00"
+    }
+  },
+  {
+    "model": "crm.contract",
+    "pk": 7,
+    "fields": {
+      "name": "Updated contract",
+      "service": 7,
+      "document": "documents/test_UYi3mpJ.json",
+      "conclusion_date": "2024-04-08",
+      "validity_period": 100,
+      "amount": "10000.00"
+    }
+  }
+]

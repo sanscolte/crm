@@ -1,0 +1,3 @@
+[tool.black]
+exclude = "crm/urls.py"
+line_length = 120

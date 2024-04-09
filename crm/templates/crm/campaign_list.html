@@ -9,14 +9,14 @@
 
   <ul>
     {% for campaign in object_list %}
-      <li><a href="{% url 'crm:advertising_campaign_details' pk=campaign.pk %}">{{ campaign.name }}</a></li>
-      <a href="{% url 'crm:advertising_campaign_delete' pk=campaign.pk %}">Delete campaign</a>
+      <li><a href="{% url 'crm:campaign_details' pk=campaign.pk %}">{{ campaign.name }}</a></li>
+      <a href="{% url 'crm:campaign_delete' pk=campaign.pk %}">Delete campaign</a>
     {% empty %}
       <li>No advertising campaigns yet</li>
     {% endfor %}
   </ul>
   <br>
   <div>
-    <a href="{% url 'crm:create_advertising_campaign' %}">Create a new advertising campaign</a>
+    <a href="{% url 'crm:create_campaign' %}">Create a new advertising campaign</a>
   </div>
 {% endblock %}

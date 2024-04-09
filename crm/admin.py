@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from crm.models import (
     Service,
-    AdvertisingCampaign,
+    Campaign,
     PotentialClient,
     Contract,
     ActiveClient,
@@ -17,10 +17,11 @@ class ServiceAdmin(admin.ModelAdmin):
         "description",
         "cost",
     )
+    list_display_links = ("name",)
 
 
-@admin.register(AdvertisingCampaign)
-class AdvertisingCampaignAdmin(admin.ModelAdmin):
+@admin.register(Campaign)
+class CampaignAdmin(admin.ModelAdmin):
     list_display = (
         "pk",
         "name",
@@ -28,6 +29,7 @@ class AdvertisingCampaignAdmin(admin.ModelAdmin):
         "promotion_channel",
         "budget",
     )
+    list_display_links = ("name",)
 
 
 @admin.register(PotentialClient)
@@ -37,8 +39,9 @@ class PotentialClientAdmin(admin.ModelAdmin):
         "full_name",
         "phone",
         "email",
-        "advertising_campaign",
+        "campaign",
     )
+    list_display_links = ("full_name",)
 
 
 @admin.register(Contract)
@@ -52,6 +55,7 @@ class ContactAdmin(admin.ModelAdmin):
         "validity_period",
         "amount",
     )
+    list_display_links = ("name",)
 
 
 @admin.register(ActiveClient)
@@ -61,3 +65,4 @@ class ActiveClientAdmin(admin.ModelAdmin):
         "potential_client",
         "contract",
     )
+    list_display_links = ("potential_client",)

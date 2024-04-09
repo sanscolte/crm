@@ -15,12 +15,12 @@
   </ul>
   <br>
   <div>
-    <a href="{% url 'crm:advertising_campaign_update' pk=object.pk %}">Update advertising campaign</a>
+    <a href="{% url 'crm:campaign_update' pk=object.pk %}">Update advertising campaign</a>
   </div>
   <div>
-    <a href="{% url 'crm:advertising_campaign_delete' pk=object.pk %}">Delete advertising campaign</a>
+    <a href="{% url 'crm:campaign_delete' pk=object.pk %}">Delete advertising campaign</a>
   </div>
   <div>
-    <a href="{% url 'crm:advertising_campaigns' %}">Back to advertising campaigns</a>
+    <a href="{% url 'crm:campaigns' %}">Back to advertising campaigns</a>
   </div>
 {% endblock %}

@@ -1,0 +1,62 @@
+[
+  {
+    "model": "crm.potentialclient",
+    "pk": 1,
+    "fields": {
+      "full_name": "New potential client",
+      "phone": "+1234567890",
+      "email": "potentialclient@gmail.com",
+      "campaign": 1
+    }
+  },
+  {
+    "model": "crm.potentialclient",
+    "pk": 3,
+    "fields": {
+      "full_name": "Other potential client",
+      "phone": "+1234567899",
+      "email": "potentialclient@icloud.com",
+      "campaign": 1
+    }
+  },
+  {
+    "model": "crm.potentialclient",
+    "pk": 4,
+    "fields": {
+      "full_name": "Same potential client",
+      "phone": "+1111111111",
+      "email": "test@gmail.com",
+      "campaign": 1
+    }
+  },
+  {
+    "model": "crm.potentialclient",
+    "pk": 5,
+    "fields": {
+      "full_name": "Just potential client",
+      "phone": "+1224323435",
+      "email": "justpc@gmail.com",
+      "campaign": 1
+    }
+  },
+  {
+    "model": "crm.potentialclient",
+    "pk": 6,
+    "fields": {
+      "full_name": "Test potential client",
+      "phone": "+1111111111",
+      "email": "newpc@example.com",
+      "campaign": 1
+    }
+  },
+  {
+    "model": "crm.potentialclient",
+    "pk": 7,
+    "fields": {
+      "full_name": "Updated potential client",
+      "phone": "+1222222222",
+      "email": "upc@example.com",
+      "campaign": 1
+    }
+  }
+]

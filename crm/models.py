@@ -2,45 +2,50 @@ from django.db import models
 
 
 class Service(models.Model):
-    """ Модель услуги """
+    """Модель услуги"""
+
     class Meta:
         verbose_name = "Услуга"
         verbose_name_plural = "Услуги"
 
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    cost = models.DecimalField(max_digits=100, decimal_places=2)
+    name = models.CharField(max_length=100, verbose_name="название")
+    description = models.TextField(verbose_name="описание")
+    cost = models.DecimalField(max_digits=100, decimal_places=2, verbose_name="стоимость")
 
     def __str__(self):
         return self.name
 
 
-class AdvertisingCampaign(models.Model):
-    """ Модель рекламной компании """
+class Campaign(models.Model):
+    """Модель рекламной компании"""
+
     class Meta:
         verbose_name = "Рекламная компания"
         verbose_name_plural = "Рекламные компании"
 
-    name = models.CharField(max_length=100)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    promotion_channel = models.CharField(max_length=100)
-    budget = models.DecimalField(max_digits=10, decimal_places=2)
+    name = models.CharField(max_length=100, verbose_name="название")
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="услуга")
+    promotion_channel = models.CharField(max_length=100, verbose_name="канал продвижения")
+    budget = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="бюджет")
 
     def __str__(self):
         return self.name
 
 
 class PotentialClient(models.Model):
-    """ Модель потенциального клиента """
+    """Модель потенциального клиента"""
+
     class Meta:
         verbose_name = "Потенциальный клиент"
         verbose_name_plural = "Потенциальные клиенты"
 
-    full_name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=11)
-    email = models.EmailField()
-    advertising_campaign = models.ForeignKey(
-        AdvertisingCampaign, on_delete=models.CASCADE
+    full_name = models.CharField(max_length=100, verbose_name="Ф.И.О")
+    phone = models.CharField(max_length=11, verbose_name="телефон")
+    email = models.EmailField(verbose_name="email")
+    campaign = models.ForeignKey(
+        Campaign,
+        on_delete=models.CASCADE,
+        verbose_name="рекламная кампания",
     )
 
     def __str__(self):
@@ -48,30 +53,34 @@ class PotentialClient(models.Model):
 
 
 class Contract(models.Model):
-    """ Модель контракта """
+    """Модель контракта"""
+
     class Meta:
         verbose_name = "Контракт"
         verbose_name_plural = "Контракты"
 
-    name = models.CharField(max_length=100)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    document = models.FileField(upload_to="documents/")
-    conclusion_date = models.DateField()
-    validity_period = models.PositiveIntegerField()
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    name = models.CharField(max_length=100, verbose_name="название")
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="услуга")
+    document = models.FileField(upload_to="documents/", verbose_name="документ")
+    conclusion_date = models.DateField(verbose_name="дата заключения")
+    validity_period = models.PositiveIntegerField(verbose_name="период действия")
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="сумма")
 
     def __str__(self):
         return self.name
 
 
 class ActiveClient(models.Model):
-    """ Модель активного клиента """
+    """Модель активного клиента"""
+
     class Meta:
         verbose_name = "Активный клиент"
         verbose_name_plural = "Активные клиенты"
 
-    potential_client = models.OneToOneField(PotentialClient, on_delete=models.CASCADE)
-    contract = models.OneToOneField(Contract, on_delete=models.CASCADE)
+    potential_client = models.OneToOneField(
+        PotentialClient, on_delete=models.CASCADE, verbose_name="потенциальный клиент"
+    )
+    contract = models.OneToOneField(Contract, on_delete=models.CASCADE, verbose_name="контракт")
 
     def __str__(self):
         return self.potential_client.full_name

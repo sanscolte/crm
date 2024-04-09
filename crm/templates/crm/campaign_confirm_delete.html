@@ -7,7 +7,7 @@
 {% block body %}
   <h1>Are you sure you want to delete {{ object.name }}?</h1>
   <div>
-    <a href="{% url 'crm:advertising_campaign_details' pk=object.pk %}">
+    <a href="{% url 'crm:campaign_details' pk=object.pk %}">
       Back to advertising campaign
     </a>
   </div>
