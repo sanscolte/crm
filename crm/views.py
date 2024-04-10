@@ -1,8 +1,9 @@
+from decimal import Decimal
 from typing import List, Tuple, Any, Dict, Literal
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ImproperlyConfigured
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Sum
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -301,9 +302,10 @@ class StatisticsView(LoginRequiredMixin, TemplateView):
 
         potential_clients: int = PotentialClient.objects.count()
         active_clients: int = ActiveClient.objects.count()
-        total_income: int = sum(int(contract.amount) for contract in Contract.objects.all())
-        total_expenses: int = sum(int(campaign.budget) for campaign in Campaign.objects.all())
-        income_expenses_ratio: float = round((total_income / total_expenses if total_income > 0 else 0), 2)
+        total_income: Decimal = Contract.objects.aggregate(Sum('amount')).get('amount__sum')
+        total_expenses: Decimal = Campaign.objects.aggregate(Sum('budget')).get('budget__sum')
+
+        income_expenses_ratio: Decimal = round((total_income / total_expenses if total_income > 0 else 0), 2)
 
         context["potential_clients"] = potential_clients
         context["active_clients"] = active_clients

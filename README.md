@@ -26,10 +26,10 @@ mypy crm/ --check-untyped-defs --disallow-untyped-defs
 pylint --rcfile .pylintrc crm/*
 ```
 
-* Линтер black
+* Линтер ruff
 
 ```shell
-black crm/
+ruff check crm/
 ```
 
 ### Как запустить web-сервер
